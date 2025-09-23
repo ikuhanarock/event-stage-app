@@ -1,4 +1,6 @@
 
+require('dotenv').config();
+
 const express = require('express');
 const { VertexAI } = require('@google-cloud/vertexai');
 const { Storage } = require('@google-cloud/storage');
@@ -6,15 +8,19 @@ const { Storage } = require('@google-cloud/storage');
 const app = express();
 const port = process.env.PORT || 8080;
 
+// --- Environment Variable Validation ---
+if (!process.env.GCLOUD_PROJECT || !process.env.GCS_BUCKET_NAME) {
+  console.error('FATAL ERROR: GCLOUD_PROJECT and GCS_BUCKET_NAME environment variables are required.');
+  process.exit(1);
+}
+
 // --- Vertex AI and Cloud Storage Configuration ---
-// TODO: Replace with your actual project ID and location
-const project = process.env.GCLOUD_PROJECT || 'your-gcp-project-id';
+const project = process.env.GCLOUD_PROJECT;
 const location = 'us-central1';
 const storage = new Storage({ projectId: project });
 const vertexAI = new VertexAI({ project: project, location: location });
 
-// TODO: Replace with your GCS bucket name
-const bucketName = process.env.GCS_BUCKET_NAME || 'your-gcs-bucket-name';
+const bucketName = process.env.GCS_BUCKET_NAME;
 
 // --- Dummy Data ---
 const dummyStages = [
