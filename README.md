@@ -104,5 +104,5 @@ If you want to run the backend on your local machine while connecting to your li
 
 2.  **Configure the backend:**
     - Copy `backend/.env.example` to `backend/.env`.
-    - Fill in the `GCLOUD_PROJECT` and `GCS_BUCKET_NAME` values.
+    - Fill in the `GCP_PROJECT_ID` and `GCS_BUCKET_NAME` values.
     - Set `GOOGLE_APPLICATION_CREDENTIALS` to the path of the key file you just created (e.g., `../service-account-key.json`).
