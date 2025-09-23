@@ -9,13 +9,13 @@ const app = express();
 const port = process.env.PORT || 8080;
 
 // --- Environment Variable Validation ---
-if (!process.env.GCLOUD_PROJECT || !process.env.GCS_BUCKET_NAME) {
-  console.error('FATAL ERROR: GCLOUD_PROJECT and GCS_BUCKET_NAME environment variables are required.');
+if (!process.env.GCP_PROJECT_ID || !process.env.GCS_BUCKET_NAME) {
+  console.error('FATAL ERROR: GCP_PROJECT_ID and GCS_BUCKET_NAME environment variables are required.');
   process.exit(1);
 }
 
 // --- Vertex AI and Cloud Storage Configuration ---
-const project = process.env.GCLOUD_PROJECT;
+const project = process.env.GCP_PROJECT_ID;
 const location = 'us-central1';
 const storage = new Storage({ projectId: project });
 const vertexAI = new VertexAI({ project: project, location: location });
