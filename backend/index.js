@@ -37,20 +37,12 @@ const dummyStages = [
  * @returns {Promise<string>} The summarized text.
  */
 async function getSummaryFromGemini(text) {
-  // TODO: This is a mock. Replace with a real Gemini API call.
-  // For PoC, we just truncate and add a prefix.
-  console.log(`[MOCK] Summarizing text: "${text.substring(0, 30)}..."`);
-  const summary = `AI Summary: ${text.substring(0, 150)}...`;
-  
-  // Example for actual implementation:
-  /*
+  console.log(`Summarizing text with Gemini: "${text.substring(0, 30)}..."`);
   const generativeModel = vertexAI.getGenerativeModel({ model: 'gemini-1.0-pro' });
   const prompt = `Summarize the following event description in under 200 characters: ${text}`;
   const resp = await generativeModel.generateContent(prompt);
   const summary = resp.response.candidates[0].content.parts[0].text;
-  */
-  
-  return Promise.resolve(summary);
+  return summary;
 }
 
 /**
@@ -59,20 +51,11 @@ async function getSummaryFromGemini(text) {
  * @returns {Promise<Buffer>} A buffer containing the video data.
  */
 async function createVideoWithImagen(textPrompt) {
-  // TODO: This is a mock. Replace with a real Imagen Video API call.
-  // For PoC, we'll return a placeholder buffer.
-  console.log(`[MOCK] Generating video for prompt: "${textPrompt.substring(0, 50)}..."`);
-  
-  // Example for actual implementation:
-  /*
-  const videoModel = vertexAI.getVideoModel({ model: 'imagen-video-001' });
-  const result = await videoModel.generate({ prompt: textPrompt });
-  const videoBuffer = result.videos[0].buffer; // Assuming the API returns a buffer
-  return videoBuffer;
-  */
-
-  // In this PoC, we don't have a real video buffer, so we'll skip the upload
-  // and just return a placeholder URL later.
+  console.log(`Generating video with Imagen for prompt: "${textPrompt.substring(0, 50)}..."`);
+  // This is a placeholder for the actual Imagen API which is not publicly available.
+  // In a real scenario, you would use the Vertex AI client library.
+  // For this PoC, we will continue to return a placeholder.
+  console.log('[MOCK] Imagen Video API is not available in this PoC, returning placeholder.');
   return Promise.resolve(Buffer.from('fake-video-data'));
 }
 
@@ -83,12 +66,7 @@ async function createVideoWithImagen(textPrompt) {
  * @returns {Promise<string>} The public URL of the file.
  */
 async function saveToGCSAndGetPublicUrl(buffer, destination) {
-  // TODO: This is a mock. Replace with a real GCS upload.
-  // For PoC, we'll just return a placeholder URL.
-  console.log(`[MOCK] Saving to GCS at: ${destination}`);
-  
-  // Example for actual implementation:
-  /*
+  console.log(`Saving to GCS at: ${destination}`);
   const bucket = storage.bucket(bucketName);
   const file = bucket.file(destination);
   await file.save(buffer, {
@@ -96,10 +74,6 @@ async function saveToGCSAndGetPublicUrl(buffer, destination) {
   });
   await file.makePublic();
   return file.publicUrl();
-  */
-
-  // Return a placeholder video for the frontend to use.
-  return Promise.resolve('https://storage.googleapis.com/gtv-videos-bucket/sample/BigBuckBunny.mp4');
 }
 
 
@@ -118,8 +92,7 @@ app.get('/api/stages', async (req, res) => {
 
       // 3. Save video to GCS and get URL
       const destination = `videos/${stage.id}-${Date.now()}.mp4`;
-      // In the real implementation, pass videoBuffer instead of an empty buffer
-      const videoUrl = await saveToGCSAndGetPublicUrl(Buffer.from(''), destination);
+      const videoUrl = await saveToGCSAndGetPublicUrl(videoBuffer, destination);
 
       return {
         name: stage.name,
